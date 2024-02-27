@@ -1,56 +1,88 @@
+"use client";
+
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import { FaFacebook, FaGithub } from "react-icons/fa";
+import src from "@/assets/logo.png";
+import Image from "next/image";
+import { useState } from "react";
+import { Avatar } from "@mui/material";
 
-export default function Navbar() {
+export default function Navbar({ session }) {
+  const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+  const togglePopup = () => {
+    setIsPopupOpen(!isPopupOpen);
+  };
+
+  const handleLogout = async () => {
+    // Perform logout operation using NextAuth
+    await signOut({ redirect: false });
+    setIsPopupOpen(false);
+  };
+
+  console.log(session);
+
   return (
-    <div className="relative z-10">
-      <section className="py-5 text-white">
-        <div className="container mx-auto flex justify-between">
-          <div>
-            <h1 className="text-4xl font-bold">Application</h1>
-            <span>ONLINE EDUCATION AND LEARNING</span>
-          </div>
-          <div className="flex">
-            <FaFacebook className="w-10 h-10 rounded-full text-center bg-white bg-opacity-30 transition duration-500 ease-in-out ml-2.5 hover:bg-[#1eb2a6] hover:text-white cursor-pointer" />
-            <FaGithub className="w-10 h-10 rounded-full text-center bg-white bg-opacity-30 transition duration-500 ease-in-out ml-2.5 hover:bg-[#1eb2a6] hover:text-white cursor-pointer" />
-          </div>
-        </div>
-      </section>
-
-      <header className="bg-white bg-opacity-20 mx-7">
-        <nav className="flex justify-between">
-          <ul className="flex py-7 px-5">
+    <div>
+      <nav className="container mx-auto flex items-center justify-between py-4 px-6">
+        {/* Logo */}
+        <div className="flex items-center">
+          <Image src={src} alt=" Logo" className="mr-10 h-12 w-12" />
+          <ul className="flex">
             <li className="mr-10">
-              <Link href="/">HOME</Link>
+              <Link href="/">Home</Link>
             </li>
             <li className="mr-10">
-              <Link href="/courses">COURSES</Link>
+              <Link href="/about">About</Link>
             </li>
             <li className="mr-10">
-              <Link href="/about">ABOUT</Link>
+              <Link href="/courses">Courses</Link>
             </li>
             <li className="mr-10">
-              <Link href="/wallet">WALLET</Link>
+              <Link href="/wallet">Wallet</Link>
             </li>
             <li className="mr-10">
-              <Link href="/mycourses">MY COURSES</Link>
-            </li>
-            <li className="mr-10">
-              <Link href="/profile">PROFILE</Link>
-            </li>
-            <li className="mr-10">
-              <button
-                onClick={() => {
-                  signOut();
-                }}
-              >
-                LOGOUT
-              </button>
+              <Link href="/contact-us">Contact Us</Link>
             </li>
           </ul>
-        </nav>
-      </header>
+        </div>
+
+        {/* Search and Register */}
+        {session ? (
+          <div className="relative flex items-center">
+            <div onClick={togglePopup} className="cursor-pointer">
+              {/* Assuming 'session.user.name' exists and holds the full name */}
+              <Avatar>{session.user.name.slice(0, 2).toUpperCase()}</Avatar>
+              {isPopupOpen && (
+                <div className="absolute right-0 mt-2 bg-white border-2 border-gray-200 p-2 rounded-md shadow-md">
+                  {/* Add any additional options here */}
+                  <Link
+                    href="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Profile
+                  </Link>
+                  <button
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={handleLogout}
+                  >
+                    Logout
+                  </button>
+                </div>
+              )}
+            </div>
+          </div>
+        ) : (
+          <div className="flex items-center">
+            <Link
+              href="/auth/signup"
+              className="ml-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition duration-300"
+            >
+              Register
+            </Link>
+          </div>
+        )}
+      </nav>
     </div>
   );
 }
