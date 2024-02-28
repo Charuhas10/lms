@@ -7,6 +7,7 @@ const courseSchema = new Schema({
   totalTime: { type: String, required: true },
   isFree: { type: Boolean, required: true, default: true },
   credits: { type: Number, required: true, default: 0 },
+  skills: [{ type: String, required: true }],
 });
 
 const Course = models.Course || mongoose.model("Course", courseSchema);

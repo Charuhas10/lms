@@ -103,13 +103,24 @@ export default function MyCourseLayout({ name, email }) {
           <p>Welcome to your dashboard</p>
 
           <div>
-            <button onClick={() => updateFilter("all")} className="mr-2">
+            <button
+              onClick={() => updateFilter("all")}
+              className="mr-2 mt-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition duration-300"
+            >
               All
             </button>
-            <button onClick={() => updateFilter("free")} className="mr-2">
+            <button
+              onClick={() => updateFilter("free")}
+              className="mr-2 mt-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition duration-300"
+            >
               Free
             </button>
-            <button onClick={() => updateFilter("premium")}>Premium</button>
+            <button
+              className="mr-2 mt-4 bg-purple-600 text-white py-2 px-4 rounded hover:bg-purple-700 transition duration-300"
+              onClick={() => updateFilter("premium")}
+            >
+              Premium
+            </button>
           </div>
         </div>
         <div onClick={togglePopup} className="cursor-pointer">
@@ -132,7 +143,7 @@ export default function MyCourseLayout({ name, email }) {
       </div>
 
       {/* Placeholder for course cards - div3 */}
-      <div className="col-start-2 col-end-3 row-start-2 row-end-3 grid grid-cols-3 gap-8 mt-8 ml-8">
+      <div className="col-start-2 col-end-3 row-start-2 row-end-3 grid grid-cols-3 gap-8 mt-16 ml-8">
         {Array.isArray(displayCourses) &&
           displayCourses.map((course) => (
             <MyCourseCard

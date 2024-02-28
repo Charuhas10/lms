@@ -36,10 +36,10 @@ const iconList = [
   <IoInformationCircle />,
 ];
 
-const links = ["/profile", "/wallet", "/mycourses", "/about"];
-
 export default function MiniDrawer() {
+  const links = ["/profile", "/wallet", "/mycourses", "/about"];
   const theme = useTheme();
+  const titles = ["profile", "wallet", "mycourses", "about"]; // Titles corresponding to the links
 
   return (
     <Box sx={{ display: "flex" }}>
@@ -50,6 +50,7 @@ export default function MiniDrawer() {
             <ListItem key={index} disablePadding>
               <Link href={links[index]} passHref>
                 <ListItemButton
+                  title={titles[index]} // Add title attribute here
                   sx={{
                     minHeight: 48,
                     justifyContent: "center",
