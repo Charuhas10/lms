@@ -17,7 +17,9 @@ export default function HomeSection({ session }) {
               The Best <br /> Platform Enroll in Your Special Course
             </h1>
             <p className="text-gray-500">
+              {/* eslint-disable-next-line */}
               "Our mission is to help people to find the best course — online
+              {/* eslint-disable-next-line */}
               and learn with expert anywhere"
             </p>
             <div className="flex justify-center md:justify-start space-x-4">

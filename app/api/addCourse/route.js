@@ -1,4 +1,5 @@
 import { connectMongoDB } from "@/lib/mongodb";
+import Transaction from "@/models/transaction";
 import User from "@/models/user";
 import { NextResponse } from "next/server";
 
@@ -16,14 +17,17 @@ export async function POST(req) {
       { new: true }
     ).populate("enrolledCourses"); // Optionally populate to return updated courses
 
-    // const updatedUser = await User.findOneAndUpdate(
-    //   { _id: userid },
-    //   { enrolledCourses: [...user.enrolledCourses, courseid] }
-    // );
     if (!updatedUser) {
       return res.status(404).json({ message: "User not found" });
     }
     console.log("updatedUser: ", updatedUser);
+
+    const newTransaction = new Transaction({
+      userId: userid,
+      courseId: courseid,
+    });
+    await newTransaction.save();
+
     return NextResponse.json({ updatedUser });
   } catch (error) {
     console.log(error);
