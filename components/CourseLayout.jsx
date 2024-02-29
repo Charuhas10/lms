@@ -18,12 +18,13 @@ export default function CourseLayout({ name, email }) {
   const [isSkillsOpen, setIsSkillsOpen] = useState(false);
   const [isFreeSelected, setIsFreeSelected] = useState(false);
   const [isPremiumSelected, setIsPremiumSelected] = useState(false);
-  
+
   const router = useRouter();
 
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
   };
+  console.log("courses", courses);
 
   useEffect(() => {
     const getCourses = async () => {
@@ -57,8 +58,6 @@ export default function CourseLayout({ name, email }) {
     setIsPopupOpen(false);
     router.push("/");
   };
-
-
 
   const allSkills = [
     ...new Set(

@@ -5,11 +5,14 @@ import Sidebar from "@/components/Sidebar";
 import { Avatar } from "@mui/material";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
+import Link from "next/link";
+import impressions from "@/assets/impressions.png";
 
 export default function CoursePage({ id, email, name }) {
   const [course, setCourse] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [user, setUser] = useState(null);
+
   useEffect(() => {
     // Fetch course details based on `id`
     const fetchCourse = async () => {
@@ -90,19 +93,24 @@ export default function CoursePage({ id, email, name }) {
         <div>
           {/* <h2>Hello {name}</h2>
           <p>Welcome to your dashboard</p> */}
-          <h1>Available: {user.credits}</h1>
+          <h1>
+            <span className=" text-orange-300">Available:</span> {user.credits}
+          </h1>
         </div>
 
         <div onClick={togglePopup} className="cursor-pointer">
           <Avatar>{name.slice(0, 2).toUpperCase()}</Avatar>
           {isPopupOpen && (
-            <div
-              className="z-10"
-              style={{ position: "absolute", right: 0, marginTop: "10px" }}
-            >
-              {/* Style this div as per your design requirements */}
+            <div className="absolute right-0 mt-2 bg-white border-2 border-gray-200 p-2 rounded-md shadow-md">
+              {/* Add any additional options here */}
+              <Link
+                href="/profile"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Profile
+              </Link>
               <button
-                className=" border-2 text-center border-gray-200 p-2 rounded-md shadow-md w-40 h-15 z-10 bg-red-600"
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 onClick={handleLogout}
               >
                 Logout
@@ -113,28 +121,66 @@ export default function CoursePage({ id, email, name }) {
       </div>
 
       <div className="col-start-2 col-end-3 row-start-2 row-end-3 p-10">
-        <div className="flex justify-between">
+        <div className="flex flex-col md:flex-row justify-between gap-4 mb-8">
           <div>
-            <h2 className="text-3xl font-bold mb-4">{course.courseName}</h2>
-            <p className="text-lg mb-4">Faculty Development Program</p>
-            <p className="text-lg font-semibold mb-4">
-              Hands-on, Virtual Instructor-led Training
-            </p>
-            <p className="text-lg mb-4">INR: {course.credits}</p>
-            <p className="text-lg mb-8">Can purchase with credits + cash</p>
+            <h2 className="text-6xl font-bold text-[#0093c2] mb-6">
+              {course.courseName}
+            </h2>
+            <p className="mb-4"> CREDITS Needed: {course.credits}</p>
             <button
               onClick={addCourse}
-              className="bg-blue-500 text-white py-2 px-4 rounded hover:bg-blue-700 transition duration-300 ease-in-out"
+              className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300 ease-in-out mb-4"
             >
               Add to wallet
             </button>
-            <div className="mt-4">
-              <p className="text-lg">
-                Benefits: Get Certified and earn 30 credits
-              </p>
+            <p className="text-lg">Benefits: Get a Certificate</p>
+          </div>
+          <div className="flex-shrink-0">
+            <Image
+              src={course.cover}
+              alt={course.courseName}
+              width={300}
+              height={300}
+            />
+          </div>
+        </div>
+
+        <div className="flex gap-20">
+          <div className="flex-shrink-0">
+            {/* Placeholder for your badge image */}
+            <Image
+              src={impressions}
+              alt="Skill Badge"
+              width={300}
+              height={300}
+            />
+          </div>
+          <div className="flex-grow">
+            <h2 className="text-4xl font-bold mb-2">About Course</h2>
+            <h3 className="text-xl mb-4">
+              Journey to Cloud: Envisioning Your Solution
+            </h3>
+            <p className="mb-4 w-[80%]">
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+              Pellentesque et euismod ligula. Morbi mattis pretium eros, non
+              ultricies urna rhoncus non. Curabitur tellus erat, venenatis
+              fermentum volutpat in, congue ac leo. Lorem ipsum dolor sit amet,
+              consectetur adipiscing elit. Pellentesque et euismod ligula. Morbi
+              mattis pretium eros, non ultricies urna rhoncus non. Curabitur
+              tellus erat, venenatis fermentum volutpat in, congue ac leo.
+            </p>
+            <div className="flex flex-wrap gap-2">
+              {/* Dynamically generate skill tags */}
+              {course.skills.map((skill) => (
+                <span
+                  key={skill}
+                  className="bg-blue-100 text-blue-800 text-sm font-semibold mr-2 px-2.5 py-0.5 rounded dark:bg-blue-200 dark:text-blue-800"
+                >
+                  {skill}
+                </span>
+              ))}
             </div>
           </div>
-          <Image src={course.cover} alt="Course" width={300} height={300} />
         </div>
       </div>
     </div>

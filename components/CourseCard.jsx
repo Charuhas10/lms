@@ -48,7 +48,7 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
   };
 
   return (
-    <div className="max-w-xs h-[364px] rounded overflow-hidden shadow-lg">
+    <div className="max-w-xs h-[364px] rounded overflow-hidden shadow-lg hover:shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
       <div className="w-full h-40 relative">
         {/* Adjust height as per your design */}
         <Image
