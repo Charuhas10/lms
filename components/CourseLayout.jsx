@@ -13,6 +13,12 @@ export default function CourseLayout({ name, email }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [filter, setFilter] = useState("all"); // Added filter state
+
+  const [isFreeOpen, setIsFreeOpen] = useState(false);
+  const [isSkillsOpen, setIsSkillsOpen] = useState(false);
+  const [isFreeSelected, setIsFreeSelected] = useState(false);
+  const [isPremiumSelected, setIsPremiumSelected] = useState(false);
+  
   const router = useRouter();
 
   const togglePopup = () => {
@@ -52,11 +58,7 @@ export default function CourseLayout({ name, email }) {
     router.push("/");
   };
 
-  const [isFreeOpen, setIsFreeOpen] = useState(false);
-  const [isSkillsOpen, setIsSkillsOpen] = useState(false);
 
-  const [isFreeSelected, setIsFreeSelected] = useState(false);
-  const [isPremiumSelected, setIsPremiumSelected] = useState(false);
 
   const allSkills = [
     ...new Set(
@@ -87,6 +89,18 @@ export default function CourseLayout({ name, email }) {
     }
   };
 
+  useEffect(() => {
+    if (isFreeSelected && isPremiumSelected) {
+      setFilter("all");
+    } else if (!isFreeSelected && !isPremiumSelected) {
+      setFilter("all");
+    } else if (isFreeSelected) {
+      setFilter("free");
+    } else if (isPremiumSelected) {
+      setFilter("premium");
+    }
+  }, [isFreeSelected, isPremiumSelected]);
+
   const [selectedSkills, setSelectedSkills] = useState([]);
 
   const handleSkillChange = (skill) => {
@@ -104,17 +118,37 @@ export default function CourseLayout({ name, email }) {
   };
 
   const filteredCourses = courses.filter((course) => {
-    const matchesFree = isFreeSelected ? course.isFree : true;
-    const matchesPremium = isPremiumSelected ? !course.isFree : true;
+    const matchesFilter =
+      filter === "all" ||
+      (filter === "free" && course.isFree) ||
+      (filter === "premium" && !course.isFree);
     const matchesSkills =
-      selectedSkills.length > 0
-        ? course.skills.some((skill) =>
-            selectedSkills.includes(skill.toLowerCase())
-          )
-        : true;
-
-    return matchesFree && matchesPremium && matchesSkills;
+      selectedSkills.length === 0 ||
+      course.skills.some((skill) =>
+        selectedSkills.includes(skill.toLowerCase())
+      );
+    return matchesFilter && matchesSkills;
   });
+
+  // const filteredCourses = courses.filter((course) => {
+  //   // if (filter === "all") {
+  //   //   return selectedSkills.length > 0
+  //   //     ? course.skills.some((skill) =>
+  //   //         selectedSkills.includes(skill.toLowerCase())
+  //   //       )
+  //   //     : true;
+  //   // }
+  //   const matchesFree = isFreeSelected ? course.isFree : true;
+  //   const matchesPremium = isPremiumSelected ? !course.isFree : true;
+  //   const matchesSkills =
+  //     selectedSkills.length > 0
+  //       ? course.skills.some((skill) =>
+  //           selectedSkills.includes(skill.toLowerCase())
+  //         )
+  //       : true;
+
+  //   return matchesFree && matchesPremium && matchesSkills;
+  // });
 
   return (
     <div className="grid grid-cols-[70px_1fr] grid-rows-[90px_1fr] gap-0">
