@@ -3,7 +3,6 @@
 import { Avatar } from "@mui/material";
 import Sidebar from "./Sidebar";
 import React, { useEffect, useState } from "react";
-// import { coursesCard } from "../dummyData";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
@@ -128,26 +127,6 @@ export default function CourseLayout({ name, email }) {
       );
     return matchesFilter && matchesSkills;
   });
-
-  // const filteredCourses = courses.filter((course) => {
-  //   // if (filter === "all") {
-  //   //   return selectedSkills.length > 0
-  //   //     ? course.skills.some((skill) =>
-  //   //         selectedSkills.includes(skill.toLowerCase())
-  //   //       )
-  //   //     : true;
-  //   // }
-  //   const matchesFree = isFreeSelected ? course.isFree : true;
-  //   const matchesPremium = isPremiumSelected ? !course.isFree : true;
-  //   const matchesSkills =
-  //     selectedSkills.length > 0
-  //       ? course.skills.some((skill) =>
-  //           selectedSkills.includes(skill.toLowerCase())
-  //         )
-  //       : true;
-
-  //   return matchesFree && matchesPremium && matchesSkills;
-  // });
 
   return (
     <div className="grid grid-cols-[70px_1fr] grid-rows-[90px_1fr] gap-0">
