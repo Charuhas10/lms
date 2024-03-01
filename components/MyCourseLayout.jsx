@@ -6,6 +6,7 @@ import React, { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import MyCourseCard from "./MyCourseCard";
+import Link from "next/link";
 
 export default function MyCourseLayout({ name, email }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -71,16 +72,6 @@ export default function MyCourseLayout({ name, email }) {
 
     filterCourses();
   }, [user, allCourses]);
-
-  // const updateFilter = (newFilter) => {
-  //   setFilter(newFilter);
-  // };
-
-  // const filteredCourses = displayCourses.filter((course) => {
-  //   if (filter === "all") return true;
-  //   if (filter === "free") return course.isFree;
-  //   if (filter === "premium") return !course.isFree;
-  // });
 
   const handleLogout = () => {
     signOut();
@@ -243,14 +234,6 @@ export default function MyCourseLayout({ name, email }) {
                         <span>{skill}</span>
                       </label>
                     ))}
-                    {/* <label className="flex items-center space-x-2">
-                      <input type="checkbox" className="form-checkbox" />
-                      <span>Free</span>
-                    </label>
-                    <label className="flex items-center space-x-2">
-                      <input type="checkbox" className="form-checkbox" />
-                      <span>Premium</span>
-                    </label> */}
                   </div>
                 )}
               </div>
@@ -260,13 +243,16 @@ export default function MyCourseLayout({ name, email }) {
         <div onClick={togglePopup} className="cursor-pointer">
           <Avatar>{name.slice(0, 2).toUpperCase()}</Avatar>
           {isPopupOpen && (
-            <div
-              className="z-10"
-              style={{ position: "absolute", right: 0, marginTop: "10px" }}
-            >
-              {/* Style this div as per your design requirements */}
+            <div className="absolute right-0 mt-2 bg-white border-2 border-gray-200 p-2 rounded-md shadow-md">
+              {/* Add any additional options here */}
+              <Link
+                href="/profile"
+                className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              >
+                Profile
+              </Link>
               <button
-                className=" border-2 text-center border-gray-200 p-2 rounded-md shadow-md w-40 h-15 z-10 bg-red-600"
+                className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                 onClick={handleLogout}
               >
                 Logout

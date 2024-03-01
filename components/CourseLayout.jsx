@@ -207,14 +207,6 @@ export default function CourseLayout({ name, email }) {
                         <span>{skill}</span>
                       </label>
                     ))}
-                    {/* <label className="flex items-center space-x-2">
-                      <input type="checkbox" className="form-checkbox" />
-                      <span>Free</span>
-                    </label>
-                    <label className="flex items-center space-x-2">
-                      <input type="checkbox" className="form-checkbox" />
-                      <span>Premium</span>
-                    </label> */}
                   </div>
                 )}
               </div>
