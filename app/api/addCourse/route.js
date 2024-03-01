@@ -1,4 +1,5 @@
 import { connectMongoDB } from "@/lib/mongodb";
+import Course from "@/models/course";
 import Transaction from "@/models/transaction";
 import User from "@/models/user";
 import { NextResponse } from "next/server";
@@ -22,9 +23,13 @@ export async function POST(req) {
     }
     console.log("updatedUser: ", updatedUser);
 
+    const course = await Course.findOne({ _id: courseid });
+    const amount = course.credits;
+
     const newTransaction = new Transaction({
       userId: userid,
       courseId: courseid,
+      amount: amount,
     });
     await newTransaction.save();
 

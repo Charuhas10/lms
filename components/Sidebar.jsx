@@ -11,6 +11,8 @@ import ListItemIcon from "@mui/material/ListItemIcon";
 import { CgProfile } from "react-icons/cg";
 import { FaWallet, FaBookOpen } from "react-icons/fa";
 import { IoInformationCircle } from "react-icons/io5";
+import { LuHistory } from "react-icons/lu";
+
 import Link from "next/link";
 
 const drawerWidth = 70; // Adjusted to make the drawer minimized
@@ -33,13 +35,14 @@ const iconList = [
   <CgProfile />,
   <FaWallet />,
   <FaBookOpen />,
+  <LuHistory />,
   <IoInformationCircle />,
 ];
 
 export default function MiniDrawer() {
-  const links = ["/profile", "/wallet", "/mycourses", "/about"];
+  const links = ["/profile", "/wallet", "/mycourses","/transaction", "/about"];
   const theme = useTheme();
-  const titles = ["profile", "wallet", "mycourses", "about"]; // Titles corresponding to the links
+  const titles = ["profile", "wallet", "mycourses","transaction", "about"]; // Titles corresponding to the links
 
   return (
     <Box sx={{ display: "flex" }}>
