@@ -9,6 +9,7 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
   const addCourse = async () => {
     console.log(email);
     try {
+      // Fetch user details
       const userResponse = await fetch("/api/getUser", {
         method: "POST",
         headers: {
@@ -16,36 +17,56 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
         },
         body: JSON.stringify({ email }),
       });
-
+  
       if (userResponse.ok) {
         const { user } = await userResponse.json();
         console.log(user);
-        if (user.trialActivated) {
-          console.log("Trial activated");
-          console.log(id);
+  
+        // Check if course is free or if user has enough credits
+        if (isFree || user.credits >= credits) {
+          if (!isFree) {
+            user.credits -= credits; // Assuming 'credits' is the cost of the course
+          }
+  
+          const remainingCredits = user.credits;
+  
+          // Add course to user's enrolled courses
           const res = await fetch("/api/addCourse", {
             method: "POST",
             headers: {
               "Content-Type": "application/json",
             },
-            body: JSON.stringify({ userid: user._id, courseid: id }),
+            body: JSON.stringify({
+              userid: user._id,
+              courseid: id,
+              credits: remainingCredits,
+            }),
           });
-
+  
           if (res.ok) {
             const { updatedUser } = await res.json();
             console.log(updatedUser);
             alert("Course added successfully");
             router.push("/mycourses");
+          } else {
+            // Handle response not OK
+            alert("Failed to add course.");
+            console.log("Failed to add course to user's enrolled courses");
           }
         } else {
-          alert("You have not activated your trial yet");
+          // Handle not enough credits
+          alert("You do not have enough credits to purchase this course");
           router.push("/wallet");
         }
+      } else {
+        // Handle userResponse not OK
+        console.log("Failed to fetch user details");
       }
     } catch (error) {
       console.error("An unexpected error happened:", error);
     }
   };
+  
 
   return (
     <div className="max-w-xs h-[364px] rounded overflow-hidden shadow-lg hover:shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">

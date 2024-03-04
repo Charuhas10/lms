@@ -7,13 +7,14 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     await connectMongoDB();
-    const { userid, courseid } = await req.json();
+    const { userid, courseid, credits } = await req.json();
     const user = await User.findOne({ _id: userid });
     console.log("user: ", user);
     const updatedUser = await User.findByIdAndUpdate(
       { _id: userid },
       {
         $addToSet: { enrolledCourses: courseid },
+        $set: { credits: credits },
       },
       { new: true }
     ).populate("enrolledCourses"); // Optionally populate to return updated courses
