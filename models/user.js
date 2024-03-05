@@ -11,6 +11,9 @@ const userSchema = new Schema(
     createdAt: { type: Date, default: Date.now },
     updatedAt: { type: Date, default: Date.now },
     enrolledCourses: [{ type: Schema.Types.ObjectId, ref: "Course" }],
+    about: { type: String },
+    dob: { type: Date },
+    gender: { type: String },
   },
   { timestamps: true }
 );

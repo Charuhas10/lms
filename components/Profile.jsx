@@ -3,16 +3,14 @@
 import React, { useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 
-export default function Profile() {
+export default function Profile({ name, email }) {
   const [isProfileEditing, setisProfileEditing] = useState(false);
 
   const [profile, setProfile] = useState({
     name: "",
-    mail: "",
     dob: "",
-    fatherName: "",
-    address: "",
-    email: "",
+    about: "",
+    email: email,
     gender: "",
   });
 
@@ -25,9 +23,34 @@ export default function Profile() {
     setProfile({ ...profile, [name]: value });
   };
 
-  const handleSaveProfile = (e) => {
+  const handleSaveProfile = async (e) => {
+    console.log("Profile updating:", profile);
     e.preventDefault();
-    setisProfileEditing(false);
+    console.log(profile);
+    try {
+      const response = await fetch("/api/profile", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(profile),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update profile");
+      }
+
+      const data = await response.json();
+      console.log("Profile updated:", data.user);
+
+      // Update local state with the updated user data
+      setProfile({ ...profile, ...data.user });
+
+      setisProfileEditing(false); // Move this line here to only toggle editing off if the update was successful
+    } catch (error) {
+      console.error("An error occurred:", error);
+      alert("Failed to update profile. Please try again.");
+    }
   };
 
   return (
@@ -39,21 +62,24 @@ export default function Profile() {
           </div>
           <form className="bg-white p-6 rounded shadow-md space-y-4 max-w-3xl mx-auto">
             <div className="flex flex-wrap -mx-3 mb-6">
-              <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
+              <div className="w-full  px-3 mb-6 md:mb-0">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="first-name"
                 >
-                  First Name
+                  Name
                 </label>
                 <input
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                  id="first-name"
+                  id="name"
                   type="text"
-                  placeholder="First Name"
+                  placeholder="Name"
+                  name="name"
+                  value={profile.name}
+                  onChange={handleInputChange}
                 />
               </div>
-              <div className="w-full md:w-1/2 px-3">
+              {/* <div className="w-full md:w-1/2 px-3">
                 <label
                   className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
                   htmlFor="last-name"
@@ -66,7 +92,7 @@ export default function Profile() {
                   type="text"
                   placeholder="Last Name"
                 />
-              </div>
+              </div> */}
             </div>
 
             <div className="flex flex-wrap -mx-3 mb-6">
@@ -78,10 +104,13 @@ export default function Profile() {
                   Email
                 </label>
                 <input
-                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
+                  className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white"
                   id="email"
                   type="email"
                   placeholder="Email"
+                  name="email"
+                  value={email} // Use email prop directly here
+                  readOnly // This makes the input read-only
                 />
               </div>
             </div>
@@ -98,6 +127,9 @@ export default function Profile() {
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="about-me"
                   placeholder="About Me"
+                  name="about"
+                  value={profile.about}
+                  onChange={handleInputChange}
                 ></textarea>
               </div>
             </div>
@@ -114,7 +146,9 @@ export default function Profile() {
                   className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                   id="dob"
                   type="date"
-                  placeholder="Date of Birth"
+                  name="dob"
+                  value={profile.dob}
+                  onChange={handleInputChange}
                 />
               </div>
               <div className="w-full md:w-1/2 px-3">
@@ -128,12 +162,16 @@ export default function Profile() {
                   <select
                     className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                     id="gender"
+                    name="gender"
+                    value={profile.gender}
+                    onChange={handleInputChange}
                   >
                     <option>Select Gender</option>
-                    <option>Male</option>
-                    <option>Female</option>
-                    <option>Other</option>
+                    <option value="Male">Male</option>
+                    <option value="Female">Female</option>
+                    <option value="Other">Other</option>
                   </select>
+
                   <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                     <svg
                       className="fill-current h-4 w-4"
@@ -155,6 +193,7 @@ export default function Profile() {
                 Cancel
               </button>
               <button
+                onClick={handleSaveProfile}
                 type="submit"
                 className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
               >
@@ -181,19 +220,23 @@ export default function Profile() {
           {/* <div className="rounded-full bg-gray-200 h-16 w-16 flex items-center justify-center">
               </div> */}
           <div className="flex-1">
-            <h2 className="text-xl font-semibold">{profile.name || "Name"}</h2>
-            <p className="text-sm text-gray-500">MAIL: {profile.mail}</p>
-            <p className="text-sm text-gray-500">DOB: {profile.dob}</p>
+            <h2 className="text-xl font-semibold">{profile.name || name}</h2>
             <p className="text-sm text-gray-500">
-              FATHER NAME: {profile.fatherName}
+              MAIL: {profile.email || email}
             </p>
-            <p className="text-sm text-gray-500">ADDRESS: {profile.address}</p>
+            <p className="text-sm text-gray-500">DOB: {profile.dob}</p>
+            <p className="text-sm text-gray-500">ABOUT: {profile.about}</p>
+            <p className="text-sm text-gray-500">GENDER: {profile.gender}</p>
+            {/* <p className="text-sm text-gray-500">
+              FATHER NAME: {profile.fatherName}
+            </p> */}
+            {/* <p className="text-sm text-gray-500">ADDRESS: {profile.address}</p> */}
           </div>
           {/* </div> */}
-          <div className="mt-4">
+          {/* <div className="mt-4">
             <h3 className="text-sm font-semibold">EMAIL</h3>
             <p className="text-sm text-gray-500">{profile.email} </p>
-          </div>
+          </div> */}
           {/* </div> */}
         </div>
       )}
