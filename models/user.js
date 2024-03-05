@@ -1,5 +1,10 @@
 import mongoose, { Schema, models } from "mongoose";
 
+const skillSchema = new Schema({
+  name: { type: String, required: true },
+  rating: { type: String, required: true },
+});
+
 const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
@@ -14,6 +19,7 @@ const userSchema = new Schema(
     about: { type: String },
     dob: { type: Date },
     gender: { type: String },
+    skills: [skillSchema],
   },
   { timestamps: true }
 );

@@ -1,10 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 
 export default function Profile({ name, email }) {
   const [isProfileEditing, setisProfileEditing] = useState(false);
+  const [user, setUser] = useState(null);
 
   const [profile, setProfile] = useState({
     name: "",
@@ -13,6 +14,39 @@ export default function Profile({ name, email }) {
     email: email,
     gender: "",
   });
+
+  useEffect(() => {
+    if (user) {
+      setProfile({
+        name: user.name || name,
+        dob: user.dob || " ",
+        about: user.about || " ",
+        email: email,
+        gender: user.gender || " ",
+      });
+    }
+  }, [user]);
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const userRes = await fetch("/api/getUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+        if (userRes.ok) {
+          const { user } = await userRes.json();
+          setUser(user);
+        }
+      } catch (error) {
+        console.error("An unexpected error happened:", error);
+      }
+    };
+    getUser();
+  }, [email]);
 
   const handleEditToggle = () => {
     setisProfileEditing(!isProfileEditing);
@@ -26,14 +60,17 @@ export default function Profile({ name, email }) {
   const handleSaveProfile = async (e) => {
     console.log("Profile updating:", profile);
     e.preventDefault();
-    console.log(profile);
+    const name = profile.name;
+    const dob = profile.dob;
+    const about = profile.about;
+    const gender = profile.gender;
     try {
       const response = await fetch("/api/profile", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(profile),
+        body: JSON.stringify({ email, name, dob, about, gender }),
       });
 
       if (!response.ok) {

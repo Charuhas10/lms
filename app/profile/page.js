@@ -13,7 +13,7 @@ export default async function Profilepage() {
   return (
     <div>
       <Profile name={session.user.name} email={session.user.email} />
-      <Skills />
+      <Skills email={session.user.email} />
       <Education />
     </div>
   );

@@ -5,7 +5,8 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     await connectMongoDB();
-    const { email, name, dob, about, gender } = req.body;
+    const { email, name, dob, about, gender } = await req.json();
+    console.log(email, name, dob, about, gender);
     console.log("hello");
     const updatedUser = await User.findOneAndUpdate(
       { email },

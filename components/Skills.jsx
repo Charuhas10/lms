@@ -2,24 +2,61 @@
 
 import React, { useState } from "react";
 
-export default function Skills() {
+export default function Skills({ email }) {
   const [isSkillsEditing, setisSkillsEditing] = useState(false);
   const [skills, setSkills] = useState([]);
-  const [skillName, setSkillName] = useState("");
-  const [skillRating, setSkillRating] = useState("");
+  const [newSkill, setNewSkill] = useState({
+    name: "",
+    rating: "",
+  });
 
   const handleAddClick = () => {
     setisSkillsEditing(true);
   };
 
-  const handleAddSkill = () => {
-    console.log("Add skill");
-    if (skillName && skillRating) {
-      const newSkill = { name: skillName, rating: skillRating };
-      setSkills([...skills, newSkill]);
-      setSkillName("");
-      setSkillRating("");
-      setisSkillsEditing(false);
+  const handleSkillChange = (e) => {
+    const { name, value } = e.target;
+    // setNewSkill((prev) => ({
+    //   ...prev,
+    //   [name]: value,
+    // }));
+    setNewSkill({ ...newSkill, [name]: value });
+  };
+
+  const handleAddSkill = async (e) => {
+    e.preventDefault();
+    if (newSkill.name && newSkill.rating) {
+      // const newSkill = { name: skillName, rating: skillRating };
+      // console.log("New skill:", newSkill);
+      try {
+        // Assuming your backend endpoint is /api/addSkills and it's set up to receive POST requests
+        const response = await fetch("/api/profile/skill", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, newSkill }),
+          // body: JSON.stringify({
+          //   email, // Make sure the email prop is correctly passed to your Skills component
+          //   skills: [newSkill], // This could be adjusted if you're adding multiple skills at once
+          // }),
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to add skill");
+        }
+
+        const data = await response.json();
+        console.log("Skill added:", data.user);
+
+        // Optionally, refresh your skills list here if your backend returns the updated list
+        setSkills([...skills, newSkill]);
+        setNewSkill({ name: "", rating: "" });
+        setisSkillsEditing(false);
+      } catch (error) {
+        console.error("An error occurred:", error);
+        alert("Failed to add skill. Please try again.");
+      }
     } else {
       console.log("Please select both a skill and a rating.");
       alert("Please select both a skill and a rating.");
@@ -54,8 +91,9 @@ export default function Skills() {
               <div className="relative">
                 <select
                   id="skill-name"
-                  value={skillName}
-                  onChange={(e) => setSkillName(e.target.value)}
+                  name="name"
+                  value={newSkill.name}
+                  onChange={handleSkillChange}
                   className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
                   <option>Select Skills</option>
@@ -86,8 +124,9 @@ export default function Skills() {
               <div className="relative">
                 <select
                   id="skill-rating"
-                  value={skillRating}
-                  onChange={(e) => setSkillRating(e.target.value)}
+                  name="rating" // Set the name attribute to match your state object keys
+                  value={newSkill.rating} // Use newSkill.rating here
+                  onChange={handleSkillChange}
                   className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
                 >
                   <option>Select Skill Level</option>
