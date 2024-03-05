@@ -5,26 +5,25 @@ import { NextResponse } from "next/server";
 export async function POST(req) {
   try {
     await connectMongoDB();
-    const { email, skills } = await req.json(); // Assuming skills is an array of skill objects
-    console.log("Adding skills to user:", skills, email);
-    if (!skills || skills.length === 0) {
-      throw new Error("No skills provided");
-    }
-
-    // Update user document by pushing new skills to the skills array
+    const { email, name, rating } = await req.json(); // Assuming newSkill is an object with name and rating
+    console.log(email, name, rating);
+    // Update user document by pushing new skill name and rating
     const updatedUser = await User.findOneAndUpdate(
-      { email }, // find a document by email
+      { email },
       {
-        $push: { skills: { $each: skills } }, // Use $push with $each to add all skills in the array
+        $push: {
+          skillsName: name, // Assuming you want to push the name into the skillsName array
+          skillsRating: rating, // And the rating into the skillsRating array
+        },
       },
-      { new: true } // Return the modified document rather than the original
+      { new: true }
     );
 
     if (!updatedUser) {
       throw new Error("User not found");
     }
-
-    console.log("User updated with new skills:", updatedUser);
+    console.log(updatedUser.skillsName, updatedUser.skillsRating);
+    console.log("User updated with new skill:", updatedUser);
     return NextResponse.json({ user: updatedUser });
   } catch (error) {
     console.log(error);

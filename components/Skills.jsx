@@ -1,14 +1,45 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 
 export default function Skills({ email }) {
   const [isSkillsEditing, setisSkillsEditing] = useState(false);
-  const [skills, setSkills] = useState([]);
-  const [newSkill, setNewSkill] = useState({
-    name: "",
-    rating: "",
-  });
+
+  const [skills, setSkills] = useState([]); // Adjust to handle an array of skill objects
+  const [newSkill, setNewSkill] = useState({ name: "", rating: "" });
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    if (user && Array.isArray(user.skillsName) && Array.isArray(user.skillsRating)) {
+      const mergedSkills = user.skillsName.map((name, index) => ({
+        name,
+        rating: user.skillsRating[index],
+      }));
+      setSkills(mergedSkills);
+    }
+  }, [user]);
+  
+
+  useEffect(() => {
+    const getUser = async () => {
+      try {
+        const userRes = await fetch("/api/getUser", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email }),
+        });
+        if (userRes.ok) {
+          const { user } = await userRes.json();
+          setUser(user);
+        }
+      } catch (error) {
+        console.error("An unexpected error happened:", error);
+      }
+    };
+    getUser();
+  }, [email]);
 
   const handleAddClick = () => {
     setisSkillsEditing(true);
@@ -16,30 +47,27 @@ export default function Skills({ email }) {
 
   const handleSkillChange = (e) => {
     const { name, value } = e.target;
-    // setNewSkill((prev) => ({
-    //   ...prev,
-    //   [name]: value,
-    // }));
     setNewSkill({ ...newSkill, [name]: value });
   };
 
+  // When adding a new skill
   const handleAddSkill = async (e) => {
     e.preventDefault();
+    // const name = skills.name;
+    // const rating = skills.rating;
     if (newSkill.name && newSkill.rating) {
-      // const newSkill = { name: skillName, rating: skillRating };
-      // console.log("New skill:", newSkill);
       try {
-        // Assuming your backend endpoint is /api/addSkills and it's set up to receive POST requests
         const response = await fetch("/api/profile/skill", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ email, newSkill }),
-          // body: JSON.stringify({
-          //   email, // Make sure the email prop is correctly passed to your Skills component
-          //   skills: [newSkill], // This could be adjusted if you're adding multiple skills at once
-          // }),
+          // Adjust this to send the newSkill as is
+          body: JSON.stringify({
+            email,
+            name: newSkill.name,
+            rating: newSkill.rating,
+          }),
         });
 
         if (!response.ok) {
@@ -48,10 +76,9 @@ export default function Skills({ email }) {
 
         const data = await response.json();
         console.log("Skill added:", data.user);
-
-        // Optionally, refresh your skills list here if your backend returns the updated list
-        setSkills([...skills, newSkill]);
+        setUser(data.user);
         setNewSkill({ name: "", rating: "" });
+        // setSkills({ ...skills, ...data.user });
         setisSkillsEditing(false);
       } catch (error) {
         console.error("An error occurred:", error);
