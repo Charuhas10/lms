@@ -10,7 +10,11 @@ export default function Skills({ email }) {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    if (user && Array.isArray(user.skillsName) && Array.isArray(user.skillsRating)) {
+    if (
+      user &&
+      Array.isArray(user.skillsName) &&
+      Array.isArray(user.skillsRating)
+    ) {
       const mergedSkills = user.skillsName.map((name, index) => ({
         name,
         rating: user.skillsRating[index],
@@ -18,7 +22,6 @@ export default function Skills({ email }) {
       setSkills(mergedSkills);
     }
   }, [user]);
-  
 
   useEffect(() => {
     const getUser = async () => {

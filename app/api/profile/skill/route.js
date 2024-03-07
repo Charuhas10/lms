@@ -17,7 +17,7 @@ export async function POST(req) {
         },
       },
       { new: true }
-    );
+    )
 
     if (!updatedUser) {
       throw new Error("User not found");
