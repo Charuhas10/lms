@@ -12,11 +12,12 @@ export default function Education() {
   ]);
 
   const [newEducation, setNewEducation] = useState({
-    year: "",
-    degree: "",
-    fieldOfStudy: "",
+    educationLevel: "",
+    country: "",
     institution: "",
+    year: "",
     grade: "",
+    gradeType: "",
   });
 
   const handleAddEducation = () => {
@@ -25,19 +26,21 @@ export default function Education() {
 
   const handleSaveEducation = () => {
     if (
-      newEducation.year &&
-      newEducation.degree &&
-      newEducation.fieldOfStudy &&
+      newEducation.educationLevel &&
+      newEducation.country &&
       newEducation.institution &&
-      newEducation.grade
+      newEducation.year &&
+      newEducation.grade &&
+      newEducation.gradeType // Ensure all required fields are filled
     ) {
       setEducationList([...educationList, newEducation]);
       setNewEducation({
-        year: "",
-        degree: "",
-        fieldOfStudy: "",
+        educationLevel: "",
+        country: "",
         institution: "",
+        year: "",
         grade: "",
+        gradeType: "",
       });
       setisEducationEditing(false);
     } else {
@@ -48,11 +51,12 @@ export default function Education() {
   const handleCancel = () => {
     setisEducationEditing(false);
     setNewEducation({
-      year: "",
-      degree: "",
-      fieldOfStudy: "",
+      educationLevel: "",
+      country: "",
       institution: "",
+      year: "",
       grade: "",
+      gradeType: "",
     });
   };
 
@@ -92,7 +96,14 @@ export default function Education() {
   );
 }
 
-const EducationCard = ({ year, degree, fieldOfStudy, institution, grade }) => {
+const EducationCard = ({
+  educationLevel,
+  country,
+  institution,
+  year,
+  grade,
+  gradeType,
+}) => {
   return (
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 flex flex-col my-2">
       <div className="mb-6">
@@ -108,16 +119,19 @@ const EducationCard = ({ year, degree, fieldOfStudy, institution, grade }) => {
           </div>
         </div>
         <p className="text-gray-600 text-base">
-          <span className="font-bold">Graduation/Degree:</span> {degree}
+          <span className="font-bold">Graduation/Degree:</span> {educationLevel}
         </p>
         <p className="text-gray-600 text-base">
-          <span className="font-bold">Field of Study:</span> {fieldOfStudy}
+          <span className="font-bold">Country:</span> {country}
         </p>
         <p className="text-gray-600 text-base">
           <span className="font-bold">Institution:</span> {institution}
         </p>
         <p className="text-gray-600 text-base">
           <span className="font-bold">Grade:</span> {grade}
+        </p>
+        <p className="text-gray-600 text-base">
+          <span className="font-bold">Grade Type:</span> {gradeType}
         </p>
       </div>
     </div>

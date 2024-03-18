@@ -1,5 +1,14 @@
 import mongoose, { Schema, models } from "mongoose";
 
+const educationSchema = new Schema({
+  level: { type: String, required: true },
+  country: { type: String, required: true },
+  school: { type: String, required: true },
+  year: { type: String, required: true },
+  aggregate: { type: String, required: true },
+  aggregateType: { type: String, required: true },
+});
+
 const userSchema = new Schema(
   {
     email: { type: String, required: true, unique: true },
