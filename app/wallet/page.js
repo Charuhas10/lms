@@ -6,9 +6,12 @@ export default async function WalletPage() {
   const session = await getServerSession(authOptions);
   console.log(session);
   if (!session) redirect("/auth/signin");
+  const email = session.user.email;
   return (
     <div>
-      <Wallet email={session.user.email} />
+      <Wallet email={email} />
     </div>
   );
 }
+
+// email={session.user.email}

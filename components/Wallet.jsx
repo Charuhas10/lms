@@ -5,78 +5,27 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import src from "../assets/courseIcon.png";
+import { activateTrial, getUser } from "@/utils/api";
 
 export default function Wallet({ email }) {
   const router = useRouter();
   const [trialActive, setTrialActive] = useState(false);
 
   useEffect(() => {
-    // Function to check the trial status
-    const checkTrialStatus = async () => {
-      try {
-        const response = await fetch("/api/getUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-
-        if (response.ok) {
-          const { user } = await response.json();
-          setTrialActive(user.trialActivated);
-        } else {
-          console.error("Failed to fetch trial status");
-        }
-      } catch (error) {
-        console.error("An unexpected error happened:", error);
-      }
+    const trialStatus = async () => {
+      const user = await getUser(email);
+      console.log("Final testing", user);
+      setTrialActive(user.trialActivated);
     };
-
-    checkTrialStatus();
-  }, [email]);
+    trialStatus();
+    if (trialActive) router.push("/courses");
+  }, [email, trialActive]);
 
   const activate = async () => {
-    try {
-      // const data = await fetch("/api/getUser", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ email }),
-      // });
-
-      // const { user } = await data.json();
-      // const trialUsed = user.trialUsed;
-      // const trialActivated = user.trialActivated;
-      // console.log("hello");
-      // console.log(user);
-      // console.log(trialUsed, trialActivated);
-
-      const res = await fetch("/api/trial", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-      if (res.ok) {
-        const updatedUser = await res.json();
-        console.log(updatedUser);
-        setTrialActive(true);
-        router.push("/courses");
-      } else {
-        console.error("Failed to activate trial");
-      }
-    } catch (error) {
-      console.error("An unexpected error happened:", error);
-    }
+    const updatedUser = await activateTrial(email);
+    setTrialActive(true);
+    router.push("/courses");
   };
-
-  // const activate = () => {
-  //   setTrialActive(true);
-  //   router.push("/wallet");
-  // };
 
   return (
     <>

@@ -1,4 +1,5 @@
 // import Image from "next/image";
+import { addCourse, getUser } from "@/utils/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import React, { useEffect } from "react";
@@ -6,57 +7,37 @@ import React, { useEffect } from "react";
 const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
   const router = useRouter();
 
-  const addCourse = async () => {
+  const add = async () => {
     console.log(email);
     try {
       // Fetch user details
-      const userResponse = await fetch("/api/getUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-  
-      if (userResponse.ok) {
-        const { user } = await userResponse.json();
+      // const userResponse = await fetch("/api/getUser", {
+      //   method: "POST",
+      //   headers: {
+      //     "Content-Type": "application/json",
+      //   },
+      //   body: JSON.stringify({ email }),
+      // });
+
+      const user = await getUser(email);
+
+      if (user) {
         console.log(user);
-  
+
         // Check if course is free or if user has enough credits
         if (isFree || user.credits >= credits) {
           if (!isFree) {
             user.credits -= credits; // Assuming 'credits' is the cost of the course
           }
-  
+
           const remainingCredits = user.credits;
-  
-          // Add course to user's enrolled courses
-          const res = await fetch("/api/addCourse", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              userid: user._id,
-              courseid: id,
-              credits: remainingCredits,
-            }),
-          });
-  
-          if (res.ok) {
-            const { updatedUser } = await res.json();
-            console.log(updatedUser);
-            alert("Course added successfully");
-            router.push("/mycourses");
-          } else {
-            // Handle response not OK
-            alert("Failed to add course.");
-            console.log("Failed to add course to user's enrolled courses");
-          }
+
+          const updatedUser = addCourse(user._id, id, remainingCredits);
+
+          if (updatedUser) router.push("/mycourses");
         } else {
           // Handle not enough credits
           alert("You do not have enough credits to purchase this course");
-          router.push("/wallet");
         }
       } else {
         // Handle userResponse not OK
@@ -66,7 +47,6 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
       console.error("An unexpected error happened:", error);
     }
   };
-  
 
   return (
     <div className="max-w-xs h-[364px] rounded overflow-hidden shadow-lg hover:shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
@@ -94,7 +74,7 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
             Know More
           </button>
           <button
-            onClick={addCourse}
+            onClick={add}
             className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
           >
             Add

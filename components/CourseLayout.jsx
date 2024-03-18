@@ -7,6 +7,7 @@ import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
 import Link from "next/link";
+import { getCourses } from "@/utils/api";
 
 export default function CourseLayout({ name, email }) {
   const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -23,33 +24,40 @@ export default function CourseLayout({ name, email }) {
   const togglePopup = () => {
     setIsPopupOpen(!isPopupOpen);
   };
-  console.log("courses", courses);
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const res = await fetch("/api/getCourses", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (res.ok) {
-          const fetchedCourses = await res.json();
-          console.log(fetchedCourses.courses);
-          console.log(fetchedCourses.courses[0]._id);
-          setCourses(fetchedCourses.courses);
-        } else {
-          console.error("Failed to fetch courses");
-        }
-      } catch (error) {
-        console.error("An unexpected error happened:", error);
-      }
+    const fetchCourse = async () => {
+      const fCourses = await getCourses();
+      setCourses(fCourses);
     };
-
-    getCourses();
+    fetchCourse();
   }, []);
+
+  // useEffect(() => {
+  //   const getCourses = async () => {
+  //     try {
+  //       const res = await fetch("/api/getCourses", {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+
+  //       if (res.ok) {
+  //         const fetchedCourses = await res.json();
+  //         console.log(fetchedCourses.courses);
+  //         console.log(fetchedCourses.courses[0]._id);
+  //         setCourses(fetchedCourses.courses);
+  //       } else {
+  //         console.error("Failed to fetch courses");
+  //       }
+  //     } catch (error) {
+  //       console.error("An unexpected error happened:", error);
+  //     }
+  //   };
+
+  //   getCourses();
+  // }, []);
 
   const handleLogout = () => {
     signOut();
