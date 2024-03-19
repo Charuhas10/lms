@@ -76,6 +76,8 @@ export default function SignUp() {
             <input
               type="text"
               id="name"
+              required
+              placeholder="Name"
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setName(e.target.value)}
             />
@@ -90,6 +92,8 @@ export default function SignUp() {
             <input
               type="email"
               id="email"
+              placeholder="Email address"
+              required
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setEmail(e.target.value)}
             />
@@ -104,6 +108,10 @@ export default function SignUp() {
             <input
               type="password"
               id="password"
+              placeholder="Password"
+              required
+              pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[\W]).{8,}"
+              title="Password must be at least 8 characters long and include at least one uppercase letter, one lowercase letter, one number, and one special character."
               className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-blue-500 focus:border-blue-500"
               onChange={(e) => setPassword(e.target.value)}
             />
