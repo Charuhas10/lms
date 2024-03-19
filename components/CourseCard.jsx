@@ -10,15 +10,6 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
   const add = async () => {
     console.log(email);
     try {
-      // Fetch user details
-      // const userResponse = await fetch("/api/getUser", {
-      //   method: "POST",
-      //   headers: {
-      //     "Content-Type": "application/json",
-      //   },
-      //   body: JSON.stringify({ email }),
-      // });
-
       const user = await getUser(email);
 
       if (user) {

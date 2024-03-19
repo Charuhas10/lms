@@ -7,26 +7,22 @@ import Image from "next/image";
 import { signOut } from "next-auth/react";
 import Link from "next/link";
 import impressions from "@/assets/impressions.png";
+import { addCourse, getUser } from "@/utils/api";
+import { useRouter } from "next/navigation";
 
 export default function CoursePage({ id, email, name }) {
   const [course, setCourse] = useState(null);
   const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [user, setUser] = useState(null);
 
+  const router = useRouter();
+
   useEffect(() => {
     // Fetch course details based on `id`
     const fetchCourse = async () => {
-      const userRes = await fetch("/api/getUser", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email }),
-      });
-      if (userRes.ok) {
-        const { user } = await userRes.json();
-        setUser(user);
-      }
+      const userRes = await getUser(email);
+      setUser(userRes);
+
       const response = await fetch(`/api/getCourses/${id}`);
       const data = await response.json();
       setCourse(data.course);
@@ -52,29 +48,31 @@ export default function CoursePage({ id, email, name }) {
     return <p>Loading...</p>;
   }
 
-  const addCourse = async () => {
+  const add = () => {
     console.log(email);
     try {
+      // const user = await getUser(email);
       if (user.trialActivated) {
-        console.log("Trial activated");
-        console.log(id);
-        const res = await fetch("/api/addCourse", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userid: user._id, courseid: id }),
-        });
+        console.log(user);
 
-        if (res.ok) {
-          const { updatedUser } = await res.json();
-          console.log(updatedUser);
-          alert("Course added successfully");
-          router.push("/mycourses");
+        // Check if course is free or if user has enough credits
+        if (course.isFree || user.credits >= credits) {
+          if (!course.isFree) {
+            user.credits -= credits; // Assuming 'credits' is the cost of the course
+          }
+
+          const remainingCredits = user.credits;
+
+          const updatedUser = addCourse(user._id, id, remainingCredits);
+
+          if (updatedUser) router.push("/mycourses");
+        } else {
+          // Handle not enough credits
+          alert("You do not have enough credits to purchase this course");
         }
       } else {
-        alert("You have not activated your trial yet");
-        router.push("/wallet");
+        // Handle userResponse not OK
+        console.log("Failed to fetch user details");
       }
     } catch (error) {
       console.error("An unexpected error happened:", error);
@@ -128,7 +126,7 @@ export default function CoursePage({ id, email, name }) {
             </h2>
             <p className="mb-4"> CREDITS Needed: {course.credits}</p>
             <button
-              onClick={addCourse}
+              onClick={add}
               className="bg-blue-600 hover:bg-blue-700 text-white py-2 px-6 rounded transition duration-300 ease-in-out mb-4"
             >
               Add to wallet
