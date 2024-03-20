@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
+import { getUser } from "@/utils/api";
 
 export default function Skills({ email }) {
   const [isSkillsEditing, setisSkillsEditing] = useState(false);
@@ -8,6 +9,14 @@ export default function Skills({ email }) {
   const [skills, setSkills] = useState([]); // Adjust to handle an array of skill objects
   const [newSkill, setNewSkill] = useState({ name: "", rating: "" });
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const userRes = await getUser(email);
+      setUser(userRes);
+    };
+    getUserData();
+  }, [email]);
 
   useEffect(() => {
     if (
@@ -22,27 +31,6 @@ export default function Skills({ email }) {
       setSkills(mergedSkills);
     }
   }, [user]);
-
-  useEffect(() => {
-    const getUser = async () => {
-      try {
-        const userRes = await fetch("/api/getUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-        if (userRes.ok) {
-          const { user } = await userRes.json();
-          setUser(user);
-        }
-      } catch (error) {
-        console.error("An unexpected error happened:", error);
-      }
-    };
-    getUser();
-  }, [email]);
 
   const handleAddClick = () => {
     setisSkillsEditing(true);

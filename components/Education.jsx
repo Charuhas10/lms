@@ -1,16 +1,11 @@
 "use client";
 
-import React, { useState } from "react";
+import { getUser } from "@/utils/api";
+import React, { useEffect, useState } from "react";
 
-export default function Education() {
+export default function Education({ email }) {
   const [isEducationEditing, setisEducationEditing] = useState(false);
-
-  const [educationList, setEducationList] = useState([
-    // This is where the education details will be added
-    // Example:
-    // { year: "2024", degree: "Bachelor of Engineering/Technology", fieldOfStudy: "Computer Science", institution: "shiv nadar university, Noida, Uttar Pradesh, India", grade: "8.46CGPA" }
-  ]);
-
+  const [educationList, setEducationList] = useState([]);
   const [newEducation, setNewEducation] = useState({
     educationLevel: "",
     country: "",
@@ -19,12 +14,46 @@ export default function Education() {
     grade: "",
     gradeType: "",
   });
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const userRes = await getUser(email);
+      setUser(userRes);
+    };
+    getUserData();
+  }, [email]);
+
+  useEffect(() => {
+    if (
+      user &&
+      Array.isArray(user.educationLevel) &&
+      Array.isArray(user.country) &&
+      Array.isArray(user.institution) &&
+      Array.isArray(user.year) &&
+      Array.isArray(user.grade) &&
+      Array.isArray(user.gradeType)
+    ) {
+      const mergedEducation = user.educationLevel.map(
+        (educationLevel, index) => ({
+          educationLevel,
+          country: user.country[index],
+          institution: user.institution[index],
+          year: user.year[index],
+          grade: user.grade[index],
+          gradeType: user.gradeType[index],
+        })
+      );
+      setEducationList(mergedEducation);
+    }
+  }, [user]);
 
   const handleAddEducation = () => {
     setisEducationEditing(true);
   };
 
-  const handleSaveEducation = () => {
+  const handleSaveEducation = async (e) => {
+    e.preventDefault();
     if (
       newEducation.educationLevel &&
       newEducation.country &&
@@ -33,16 +62,45 @@ export default function Education() {
       newEducation.grade &&
       newEducation.gradeType // Ensure all required fields are filled
     ) {
-      setEducationList([...educationList, newEducation]);
-      setNewEducation({
-        educationLevel: "",
-        country: "",
-        institution: "",
-        year: "",
-        grade: "",
-        gradeType: "",
-      });
-      setisEducationEditing(false);
+      try {
+        const res = await fetch("/api/profile/education", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            educationLevel: newEducation.educationLevel,
+            country: newEducation.country,
+            institution: newEducation.institution,
+            year: newEducation.year,
+            grade: newEducation.grade,
+            gradeType: newEducation.gradeType,
+          }),
+        });
+
+        if (!res.ok) {
+          throw new Error("failed to add education");
+        }
+
+        const data = await res.json();
+        console.log(data);
+        setUser(data.user);
+
+        setNewEducation({
+          educationLevel: "",
+          country: "",
+          institution: "",
+          year: "",
+          grade: "",
+          gradeType: "",
+        });
+        setisEducationEditing(false);
+      } catch (error) {
+        console.error("An error occurred:", error);
+        alert("Failed to add skill. Please try again.");
+      }
+      // setEducationList([...educationList, newEducation]);
     } else {
       alert("Please fill out all the fields.");
     }
@@ -118,6 +176,7 @@ const EducationCard = ({
             </button>
           </div>
         </div>
+
         <p className="text-gray-600 text-base">
           <span className="font-bold">Graduation/Degree:</span> {educationLevel}
         </p>
@@ -154,17 +213,17 @@ const EducationForm = ({ education, setEducation, onSave, onCancel }) => {
             </label>
             <div className="relative">
               <select
-                name="degree"
+                name="educationLevel"
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                value={education.degree}
+                value={education.educationLevel}
                 onChange={handleChange}
               >
                 <option>Select Course</option>
                 <option>SSC/10th</option>
                 <option>HSC/12th/Equivalent</option>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                {/* eslint-disable-next-line  */}
                 <option>Bachelor's</option>
-                {/* eslint-disable-next-line react/no-unescaped-entities */}
+                {/* eslint-disable-next-line  */}
                 <option>Master's</option>
                 <option>Ph.D.</option>
               </select>
@@ -245,15 +304,15 @@ const EducationForm = ({ education, setEducation, onSave, onCancel }) => {
           <div className="w-full md:w-1/2 px-3 mb-6 md:mb-0">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="aggregate"
+              htmlFor="grade"
             >
-              Aggregate *
+              Grade *
             </label>
             <input
               className="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-              id="aggregate"
+              id="grade"
               type="text"
-              placeholder="Aggregate"
+              placeholder="Grade"
               name="grade"
               value={education.grade}
               onChange={handleChange}
@@ -262,28 +321,25 @@ const EducationForm = ({ education, setEducation, onSave, onCancel }) => {
           <div className="w-full md:w-1/2 px-3">
             <label
               className="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2"
-              htmlFor="aggregate-type"
+              htmlFor="grade-type"
             >
-              Aggregate Type *
+              grade Type *
             </label>
             <div className="relative">
               <select
-                id="aggregate-type"
-                name="aggregateType"
+                id="grade-type"
+                name="gradeType"
                 className="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500"
-                value={education.aggregateType}
+                value={education.gradeType}
                 onChange={handleChange}
               >
-                <option>Select Aggregate Type</option>
+                <option>Select grade Type</option>
                 <option>Percentage</option>
                 <option>CGPA</option>
-                {/* Add other aggregate types as needed */}
               </select>
             </div>
           </div>
         </div>
-
-        {/* Repeat the pattern above for other fields like School/College, Year of Passing, etc. */}
 
         <div className="flex justify-between mt-6">
           <button

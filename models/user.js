@@ -39,6 +39,12 @@ const userSchema = new Schema(
     gender: { type: String },
     skillsName: { type: [String] },
     skillsRating: { type: [String] },
+    educationLevel: { type: [String] },
+    country: { type: [String] },
+    institution: { type: [String] },
+    year: { type: [String] },
+    grade: { type: [String] },
+    gradeType: { type: [String] },
   },
   { timestamps: true }
 );

@@ -3,7 +3,6 @@ import Education from "@/components/Education";
 import Profile from "@/components/Profile";
 import Skills from "@/components/Skills";
 import { getServerSession } from "next-auth";
-// import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
@@ -15,7 +14,7 @@ export default async function Profilepage() {
     <div>
       <Profile name={session.user.name} email={session.user.email} />
       <Skills email={session.user.email} />
-      <Education />
+      <Education email={session.user.email} />
     </div>
   );
 }
