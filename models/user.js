@@ -1,5 +1,5 @@
 import mongoose, { Schema, models } from "mongoose";
-import isEmail from "validator/lib/isemail";
+import isEmail from "validator/lib/isEmail";
 
 const educationSchema = new Schema({
   level: { type: String, required: true },
