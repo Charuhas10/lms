@@ -31,7 +31,7 @@ export default function Layout({ children, name }) {
       <div className="col-start-2 col-end-3 row-start-1 row-end-2 flex justify-between items-center p-10">
         <div>
           <h2 className="text-3xl font-semibold">Hello {name}</h2>
-          <p>Welcome to your dashboard</p>
+          <p>Welcome to Skill Treasury</p>
         </div>
 
         <div onClick={togglePopup} className="relative">

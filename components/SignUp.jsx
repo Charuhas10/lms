@@ -30,7 +30,7 @@ export default function SignUp() {
       const { user } = await resUserExists.json();
 
       if (user) {
-        setError("User already exists.");
+        setError("That email is already registered");
         return;
       }
 
@@ -46,6 +46,8 @@ export default function SignUp() {
         form.reset();
         signIn("credentials", { email, password, callbackUrl: "/wallet" });
       } else {
+        const { errors } = await res.json();
+        setError(errors.email || errors.password);
         console.log("User registration failed");
       }
     } catch (error) {

@@ -3,8 +3,9 @@ import Education from "@/components/Education";
 import Profile from "@/components/Profile";
 import Skills from "@/components/Skills";
 import { getServerSession } from "next-auth";
-import { authOptions } from "../api/auth/[...nextauth]/route";
+// import { authOptions } from "../api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import { authOptions } from "@/app/api/auth/[...nextauth]/route";
 
 export default async function Profilepage() {
   const session = await getServerSession(authOptions);
