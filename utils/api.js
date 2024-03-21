@@ -1,5 +1,3 @@
-import { useRouter } from "next/navigation";
-
 const createURL = (path) => {
   console.log("Path:", path);
   console.log("Origin:", window.location.origin);
