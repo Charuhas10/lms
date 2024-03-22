@@ -4,8 +4,9 @@ const transactionSchema = new Schema({
   userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   courseId: { type: Schema.Types.ObjectId, ref: "Course", required: false }, // Optional, only for course-related transactions
   date: { type: Date, default: Date.now },
-  //purchase amount
+  courseName: { type: String, required: true },
   amount: { type: Number, required: true },
+  //purchase amount
   //transaction id
   //transaction status fail or success
   //debit or credit

@@ -12,7 +12,7 @@ export async function POST(req) {
 
     const transaction = await Transaction.find({ userId: id })
       .sort({ createdAt: -1 })
-      .limit(5);
+      .limit(10);
     return NextResponse.json({ transaction });
   } catch (error) {
     console.log(error);

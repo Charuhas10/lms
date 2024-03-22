@@ -25,12 +25,14 @@ export async function POST(req) {
     console.log("updatedUser: ", updatedUser);
 
     const course = await Course.findOne({ _id: courseid });
+    console.log("course", course);
     const amount = course.credits;
 
     const newTransaction = new Transaction({
       userId: userid,
       courseId: courseid,
       amount: amount,
+      courseName: course.courseName,
     });
     await newTransaction.save();
 
