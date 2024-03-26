@@ -1,12 +1,9 @@
 "use client";
 
-import { Avatar } from "@mui/material";
-import Sidebar from "./Sidebar";
 import React, { useEffect, useState } from "react";
 import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
-import Link from "next/link";
 import { getCourses } from "@/utils/api";
 
 export default function CourseLayout({ name, email }) {
