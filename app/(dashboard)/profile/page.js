@@ -11,7 +11,7 @@ export default async function Profilepage() {
   console.log(session);
   if (!session) redirect("/auth/signin");
   return (
-    <div>
+    <div className=" w-full h-full">
       <Profile name={session.user.name} email={session.user.email} />
       <Skills email={session.user.email} />
       <Education email={session.user.email} />
