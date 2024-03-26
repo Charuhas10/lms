@@ -108,7 +108,7 @@ export default function CourseLayout({ name, email }) {
   });
 
   return (
-    <div className=" flex flex-col gap-8">
+    <div className="w-full h-full flex flex-col gap-8">
       <div>
         <div className="flex gap-10 mt-5">
           <div>
@@ -181,7 +181,7 @@ export default function CourseLayout({ name, email }) {
       </div>
 
       <div>
-        <div className="grid grid-cols-4 gap-6 ">
+        <div className="grid grid-cols-4 gap-6 mb-8">
           {Array.isArray(filteredCourses) &&
             filteredCourses.map((course) => (
               <CourseCard

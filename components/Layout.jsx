@@ -56,7 +56,7 @@ export default function Layout({ children, name }) {
       </div>
 
       {/* Main content area */}
-      <div className="col-start-2 col-end-3 row-start-2 row-end-3 flex  p-10">
+      <div className="col-start-2 col-end-3 row-start-2 row-end-3 flex p-6">
         {children}
       </div>
     </div>

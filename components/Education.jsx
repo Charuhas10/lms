@@ -124,7 +124,7 @@ export default function Education({ email }) {
   };
 
   return (
-    <div className="container  mx-auto p-2">
+    <div className="container mx-auto p-4">
       <div className="flex justify-between items-center border-b-2 border-gray-200 py-2">
         <h2 className="text-2xl font-bold">EDUCATION</h2>
 

@@ -91,7 +91,7 @@ export default function Profile({ name, email }) {
   };
 
   return (
-    <div className="m-8">
+    <div>
       {isProfileEditing && (
         <div className="container mx-auto p-4">
           <div className="flex justify-between items-center border-b-2 border-gray-200 py-2">
