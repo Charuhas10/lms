@@ -1,13 +1,11 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
 import { getCourses } from "@/utils/api";
 
 export default function CourseLayout({ name, email }) {
-  const [isPopupOpen, setIsPopupOpen] = useState(false);
   const [courses, setCourses] = useState([]);
   const [filter, setFilter] = useState("all"); // Added filter state
 
@@ -18,10 +16,6 @@ export default function CourseLayout({ name, email }) {
 
   const router = useRouter();
 
-  const togglePopup = () => {
-    setIsPopupOpen(!isPopupOpen);
-  };
-
   useEffect(() => {
     const fetchCourse = async () => {
       const fCourses = await getCourses();
@@ -29,13 +23,6 @@ export default function CourseLayout({ name, email }) {
     };
     fetchCourse();
   }, []);
-
-  const handleLogout = () => {
-    signOut();
-    console.log("User logged out");
-    setIsPopupOpen(false);
-    router.push("/");
-  };
 
   const allSkills = [
     ...new Set(
