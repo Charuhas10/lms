@@ -1,5 +1,6 @@
 "use client";
 
+import { getUser } from "@/utils/api";
 import React, { useEffect, useState } from "react";
 import { FiEdit3 } from "react-icons/fi";
 
@@ -25,27 +26,20 @@ export default function Profile({ name, email }) {
         gender: user.gender || " ",
       });
     }
-  }, [user]);
+  }, [user, name, email]);
 
   useEffect(() => {
-    const getUser = async () => {
+    const fetchUser = async () => {
       try {
-        const userRes = await fetch("/api/getUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-        if (userRes.ok) {
-          const { user } = await userRes.json();
-          setUser(user);
+        const userRes = await getUser(email);
+        if (userRes) {
+          setUser(userRes);
         }
       } catch (error) {
         console.error("An unexpected error happened:", error);
       }
     };
-    getUser();
+    fetchUser();
   }, [email]);
 
   const handleEditToggle = () => {
