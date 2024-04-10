@@ -4,7 +4,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import src from "../assets/courseIcon.png";
 import { activateTrial, getUser } from "@/utils/api";
 
 export default function Wallet({ email }) {
@@ -31,7 +30,12 @@ export default function Wallet({ email }) {
     <>
       <nav className="flex justify-between items-center p-4">
         <Link href="/">
-          <Image src={src} alt="Course Icon" className="w-[120px] h-[80px]" />
+          <Image
+            src="/courseIcon.png"
+            width={120}
+            height={80}
+            alt="Course Icon"
+          />
         </Link>
         <Link href="/courses">
           <h1>Application</h1>

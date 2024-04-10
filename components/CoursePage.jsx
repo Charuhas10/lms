@@ -1,12 +1,8 @@
 "use client";
 // app/courses/[id]/page.jsx
 import React, { useEffect, useState } from "react";
-import Sidebar from "@/components/Sidebar";
-import { Avatar } from "@mui/material";
 import Image from "next/image";
 import { signOut } from "next-auth/react";
-import Link from "next/link";
-import impressions from "@/assets/impressions.png";
 import { addCourse, getUser } from "@/utils/api";
 import { useRouter } from "next/navigation";
 
@@ -109,7 +105,12 @@ export default function CoursePage({ id, email, name }) {
 
       <div className="flex gap-20 w-full h-full">
         <div className="flex-shrink-0">
-          <Image src={impressions} alt="Skill Badge" width={300} height={300} />
+          <Image
+            src="/impressions.png"
+            alt="Skill Badge"
+            width={300}
+            height={300}
+          />
         </div>
         <div className="flex-grow">
           <h2 className="text-5xl font-bold mb-2">About Course</h2>

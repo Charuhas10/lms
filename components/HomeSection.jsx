@@ -1,5 +1,4 @@
 import Image from "next/image";
-import src from "@/assets/test.jpg";
 import Link from "next/link";
 
 export default function HomeSection({ session }) {
@@ -40,7 +39,7 @@ export default function HomeSection({ session }) {
 
           {/* Image Section */}
           <div className="md:w-1/2 lg:w-3/5">
-            <Image src={src} alt="Woman" />
+            <Image src="/test.jpg" width={5760} height={3840} alt="Woman" />
           </div>
         </div>
 
@@ -48,7 +47,6 @@ export default function HomeSection({ session }) {
         <div className="flex justify-center items-center space-x-6 mt-12">
           <p className="text-gray-500 text-sm">Trusted by 4,000+ companies</p>
           <div className="flex space-x-4">
-            {/* Replace these with actual logos and company names */}
             <div className="h-6 text-gray-800">Company A</div>
             <div className="h-6 text-gray-800">Company B</div>
             <div className="h-6 text-gray-800">Company C</div>

@@ -5,7 +5,6 @@ import Link from "next/link";
 import Image from "next/image";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import src from "../assets/logo.png";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
@@ -36,7 +35,13 @@ export default function SignIn() {
       <div className="bg-white rounded-lg shadow-lg p-8 m-4 max-w-lg w-full">
         <div className="text-center">
           <div className="mb-4">
-            <Image src={src} alt="Logo" className="mx-auto h-12 w-auto" />
+            <Image
+              src="/logo.png"
+              height={64}
+              width={64}
+              alt="Logo"
+              className="mx-auto h-12 w-auto"
+            />
           </div>
           <h1 className="text-2xl font-bold mb-8">Access Your Account</h1>
         </div>

@@ -2,7 +2,6 @@
 
 import { signOut } from "next-auth/react";
 import Link from "next/link";
-import src from "@/assets/logo.png";
 import Image from "next/image";
 import { useState } from "react";
 import { Avatar } from "@mui/material";
@@ -27,7 +26,13 @@ export default function Navbar({ session }) {
       <nav className="container mx-auto flex items-center justify-between py-4 px-6">
         {/* Logo */}
         <div className="flex items-center">
-          <Image src={src} alt=" Logo" className="mr-10 h-12 w-12" />
+          <Image
+            src="/logo.png"
+            width={64}
+            height={64}
+            alt=" Logo"
+            className="mr-10 h-12 w-12"
+          />
           <ul className="flex">
             <li className="mr-10">
               <Link href="/">Home</Link>
@@ -40,9 +45,6 @@ export default function Navbar({ session }) {
             </li>
             <li className="mr-10">
               <Link href="/wallet">Wallet</Link>
-            </li>
-            <li className="mr-10">
-              <Link href="/contact-us">Contact Us</Link>
             </li>
           </ul>
         </div>

@@ -4,7 +4,6 @@ import React, { useState } from "react";
 import { signIn } from "next-auth/react";
 import Link from "next/link";
 import Image from "next/image";
-import src from "../assets/logo.png";
 
 export default function SignUp() {
   const [name, setName] = useState("");
@@ -60,7 +59,13 @@ export default function SignUp() {
       <div className="bg-white rounded-lg shadow-lg p-8 m-4 max-w-md w-full">
         <div className="text-center mb-6">
           <div className="mb-4">
-            <Image src={src} alt="Logo" className="mx-auto h-16 w-auto" />
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              height={64}
+              width={64}
+              className="mx-auto h-16 w-auto"
+            />
           </div>
           <h1 className="text-2xl font-bold text-gray-700">
             New User? Register Here
