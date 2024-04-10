@@ -27,7 +27,6 @@ export default function CourseLayout({ email }) {
       )
     ),
   ];
-  console.log("hello", allSkills);
 
   const updateFilter = (filterType) => {
     // Toggle the selected state based on which filter was clicked
