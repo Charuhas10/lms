@@ -32,21 +32,24 @@ export default function SignIn() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-blue-100">
-      <div className="bg-white rounded-lg shadow-lg p-8 m-4 max-w-lg w-full">
-        <div className="text-center">
+      <div className="bg-white rounded-lg shadow-lg p-8 m-4 max-w-md w-full">
+        <div className="text-center mb-6">
           <div className="mb-4">
             <Image
               src="/logo.png"
               height={64}
               width={64}
               alt="Logo"
-              className="mx-auto h-12 w-auto"
+              className="mx-auto"
             />
           </div>
-          <h1 className="text-2xl font-bold mb-8">Access Your Account</h1>
+          <h1 className="text-2xl font-bold mb-8 text-gray-700">
+            Access Your Account
+          </h1>
         </div>
-        <form onSubmit={handleSubmit}>
-          <div className="mb-4">
+
+        <form onSubmit={handleSubmit} className="space-y-6">
+          <div className="mb-6">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
@@ -62,6 +65,7 @@ export default function SignIn() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
+
           <div className="mb-6">
             <label
               htmlFor="password"
@@ -80,6 +84,7 @@ export default function SignIn() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
+
           <div className="text-center">
             <button
               type="submit"

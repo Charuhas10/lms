@@ -64,16 +64,16 @@ export default function SignUp() {
               alt="Logo"
               height={64}
               width={64}
-              className="mx-auto h-16 w-auto"
+              className="mx-auto"
             />
           </div>
-          <h1 className="text-2xl font-bold text-gray-700">
+          <h1 className="text-2xl font-bold mb-8 text-gray-700">
             New User? Register Here
           </h1>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
+          <div className="mb-6">
             <label
               htmlFor="name"
               className="block text-sm font-medium text-gray-700"
@@ -89,7 +89,8 @@ export default function SignUp() {
               onChange={(e) => setName(e.target.value)}
             />
           </div>
-          <div>
+
+          <div className="mb-6">
             <label
               htmlFor="email"
               className="block text-sm font-medium text-gray-700"
@@ -105,7 +106,8 @@ export default function SignUp() {
               onChange={(e) => setEmail(e.target.value)}
             />
           </div>
-          <div>
+
+          <div className="mb-6">
             <label
               htmlFor="password"
               className="block text-sm font-medium text-gray-700"
@@ -123,7 +125,8 @@ export default function SignUp() {
               onChange={(e) => setPassword(e.target.value)}
             />
           </div>
-          <div>
+
+          <div className="text-center">
             <button
               type="submit"
               className="w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
