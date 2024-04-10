@@ -1,36 +1,32 @@
 "use client";
 
+import { getTransactions } from "@/utils/api";
 import { useEffect, useState } from "react";
 
 export default function TransactionPage({ email }) {
   const [transactions, setTransactions] = useState([]);
+  const [search, setSearch] = useState("");
 
   useEffect(() => {
-    const getTransactions = async () => {
+    const fetchTransaction = async () => {
       try {
-        const res = await fetch("/api/transaction", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-
-        if (res.ok) {
-          const { transaction } = await res.json();
-          console.log("hello", transaction);
-          setTransactions(transaction);
-        } else {
-          console.error("Failed to fetch transactions");
-        }
+        const t = await getTransactions(email);
+        setTransactions(t);
       } catch (error) {
         console.error("An unexpected error happened:", error);
       }
     };
-    getTransactions();
+
+    fetchTransaction();
   }, [email]);
 
-  console.log(transactions);
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  const filteredTransactions = transactions.filter((transaction) =>
+    transaction.courseName.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className=" flex flex-col w-full h-full border p-4 shadow rounded-md">
@@ -40,7 +36,9 @@ export default function TransactionPage({ email }) {
           <input
             className=" border border-black shadow rounded-md px-4 py-2 mr-8"
             type="text"
-            placeholder="Search.."
+            placeholder="Search..."
+            value={search}
+            onChange={handleSearch}
           ></input>
           <button className=" bg-blue-500 rounded-md border border-black py-2 px-4">
             Search
@@ -67,7 +65,7 @@ export default function TransactionPage({ email }) {
             </tr>
           </thead>
           <tbody>
-            {transactions.map((transaction, index) => (
+            {filteredTransactions.map((transaction, index) => (
               <tr key={transaction._id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   {index + 1}
@@ -89,14 +87,3 @@ export default function TransactionPage({ email }) {
     </div>
   );
 }
-
-// <div className="space-y-4">
-//   {transactions.map((transaction) => (
-//     <div key={transaction._id} className="p-4 bg-white shadow rounded-md">
-//       {/* Display transaction details */}
-//       <p>{transaction.courseId}</p>
-//       <p>{transaction.amount}</p>
-//       {/* Add more transaction details you want to display */}
-//     </div>
-//   ))}
-// </div>

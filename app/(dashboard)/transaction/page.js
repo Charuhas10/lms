@@ -1,4 +1,3 @@
-import Layout from "@/components/Layout";
 import { getServerSession } from "next-auth";
 import TransactionPage from "@/components/TransactionPage";
 import { redirect } from "next/navigation";
