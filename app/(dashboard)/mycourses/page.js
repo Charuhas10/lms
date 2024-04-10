@@ -3,7 +3,6 @@ import { redirect } from "next/navigation";
 import { getServerSession } from "next-auth/next";
 import MyCourseLayout from "@/components/MyCourseLayout";
 import { authOptions } from "@/app/api/auth/[...nextauth]/route";
-import Test from "@/components/Test";
 
 export default async function MyCourses() {
   const session = await getServerSession(authOptions);

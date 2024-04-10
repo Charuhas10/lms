@@ -14,17 +14,13 @@ export default function Navbar({ session }) {
   };
 
   const handleLogout = async () => {
-    // Perform logout operation using NextAuth
     await signOut({ redirect: false });
     setIsPopupOpen(false);
   };
 
-  console.log(session);
-
   return (
     <div>
       <nav className="container mx-auto flex items-center justify-between py-4 px-6">
-        {/* Logo */}
         <div className="flex items-center">
           <Image
             src="/logo.png"
@@ -49,15 +45,12 @@ export default function Navbar({ session }) {
           </ul>
         </div>
 
-        {/* Search and Register */}
         {session ? (
           <div className="relative flex items-center">
             <div onClick={togglePopup} className="cursor-pointer">
-              {/* Assuming 'session.user.name' exists and holds the full name */}
               <Avatar>{session.user.name.slice(0, 2).toUpperCase()}</Avatar>
               {isPopupOpen && (
                 <div className="absolute right-0 mt-2 bg-white border-2 border-gray-200 p-2 rounded-md shadow-md">
-                  {/* Add any additional options here */}
                   <Link
                     href="/profile"
                     className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

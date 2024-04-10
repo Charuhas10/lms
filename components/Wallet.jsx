@@ -21,7 +21,7 @@ export default function Wallet({ email }) {
   }, [email, trialActive]);
 
   const activate = async () => {
-    const updatedUser = await activateTrial(email);
+    const updatedUser = await activateTrvial(email);
     setTrialActive(true);
     router.push("/courses");
   };
