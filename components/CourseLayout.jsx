@@ -1,20 +1,16 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import CourseCard from "./CourseCard";
 import { getCourses } from "@/utils/api";
 
-export default function CourseLayout({ name, email }) {
+export default function CourseLayout({ email }) {
   const [courses, setCourses] = useState([]);
-  const [filter, setFilter] = useState("all"); // Added filter state
-
+  const [filter, setFilter] = useState("all");
   const [isFreeOpen, setIsFreeOpen] = useState(false);
   const [isSkillsOpen, setIsSkillsOpen] = useState(false);
   const [isFreeSelected, setIsFreeSelected] = useState(false);
   const [isPremiumSelected, setIsPremiumSelected] = useState(false);
-
-  const router = useRouter();
 
   useEffect(() => {
     const fetchCourse = async () => {

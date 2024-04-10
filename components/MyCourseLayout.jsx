@@ -1,51 +1,61 @@
 "use client";
 
 import React, { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import MyCourseCard from "./MyCourseCard";
+import { getCourses, getUser } from "@/utils/api";
 
 export default function MyCourseLayout({ name, email }) {
   const [allCourses, setAllCourses] = useState([]);
   const [displayCourses, setDisplayCourses] = useState([]); // Added displayCourses state
   const [user, setUser] = useState(null);
-  const [filter, setFilter] = useState("all"); // Added filter state
+  const [filter, setFilter] = useState("all");
 
   useEffect(() => {
-    const getCourses = async () => {
-      try {
-        const userRes = await fetch("/api/getUser", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ email }),
-        });
-        if (userRes.ok) {
-          const { user } = await userRes.json();
-          setUser(user);
-        }
-
-        const res = await fetch("/api/getCourses", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-
-        if (res.ok) {
-          const fetchedCourses = await res.json();
-          // console.log(fetchedCourses.courses);
-          // console.log(fetchedCourses.courses[0]._id);
-          setAllCourses(fetchedCourses.courses);
-        } else {
-          console.error("Failed to fetch courses");
-        }
-      } catch (error) {
-        console.error("An unexpected error happened:", error);
-      }
+    const fetchCourse = async () => {
+      const fCourses = await getCourses();
+      const userRes = await getUser(email);
+      setUser(userRes);
+      setAllCourses(fCourses);
     };
-    getCourses();
+    fetchCourse();
   }, [email]);
+
+  // useEffect(() => {
+  //   const getCourses = async () => {
+  //     try {
+  //       const userRes = await fetch("/api/getUser", {
+  //         method: "POST",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //         body: JSON.stringify({ email }),
+  //       });
+  //       if (userRes.ok) {
+  //         const { user } = await userRes.json();
+  //         setUser(user);
+  //       }
+
+  //       const res = await fetch("/api/getCourses", {
+  //         method: "GET",
+  //         headers: {
+  //           "Content-Type": "application/json",
+  //         },
+  //       });
+
+  //       if (res.ok) {
+  //         const fetchedCourses = await res.json();
+  //         // console.log(fetchedCourses.courses);
+  //         // console.log(fetchedCourses.courses[0]._id);
+  //         setAllCourses(fetchedCourses.courses);
+  //       } else {
+  //         console.error("Failed to fetch courses");
+  //       }
+  //     } catch (error) {
+  //       console.error("An unexpected error happened:", error);
+  //     }
+  //   };
+  //   getCourses();
+  // }, [email]);
 
   useEffect(() => {
     // Filter logic separated and only run when user or allCourses changes

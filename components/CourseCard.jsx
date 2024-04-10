@@ -1,8 +1,7 @@
-// import Image from "next/image";
 import { addCourse, getUser } from "@/utils/api";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
-import React, { useEffect } from "react";
+import React from "react";
 
 const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
   const router = useRouter();
@@ -42,16 +41,9 @@ const CourseCard = ({ id, title, imageUrl, isFree, credits, email }) => {
   return (
     <div className="max-w-xs h-[364px] rounded overflow-hidden shadow-lg hover:shadow-md transition duration-300 ease-in-out transform hover:-translate-y-1 hover:scale-105">
       <div className="w-full h-40 relative">
-        {/* Adjust height as per your design */}
-        <Image
-          src={imageUrl}
-          alt="Course"
-          layout="fill" // This makes the image fill the container
-          objectFit="cover" // Adjust how the image fits within the container
-        />
+        <Image src={imageUrl} alt="Course" layout="fill" objectFit="cover" />
       </div>
       <div className="flex-grow px-6 py-4 flex flex-col justify-between">
-        {" "}
         {/* Use flex-grow to allow the text section to fill available space */}
         <h3 className="font-bold text-xl mb-2">{title}</h3>
         <p className="text-gray-700 text-base mb-4">

@@ -60,7 +60,7 @@ export default function Education({ email }) {
       newEducation.institution &&
       newEducation.year &&
       newEducation.grade &&
-      newEducation.gradeType // Ensure all required fields are filled
+      newEducation.gradeType 
     ) {
       try {
         const res = await fetch("/api/profile/education", {
