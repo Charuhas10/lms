@@ -14,7 +14,6 @@ export default function CoursePage({ id, email, name }) {
   const router = useRouter();
 
   useEffect(() => {
-    // Fetch course details based on `id`
     const fetchCourse = async () => {
       const userRes = await getUser(email);
       setUser(userRes);
