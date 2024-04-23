@@ -38,7 +38,7 @@ export default function Wallet({ email }) {
           />
         </Link>
         <Link href="/courses">
-          <h1>Application</h1>
+          <h1>Skill Treasury</h1>
         </Link>
       </nav>
       <div className="flex justify-center items-start p-6 gap-5">
